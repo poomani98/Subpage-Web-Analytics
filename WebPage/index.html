@@ -1,0 +1,87 @@
+<html style="height:100%;">
+	<script>
+		var heatmap = [];
+		var click = [];
+		var scroll = 0;
+		function mmove(event) {
+			const x = event.clientX;
+			const y = event.clientY;
+			const coor = { "x":x,"y":y };
+			heatmap.push(coor);
+		}
+		
+		
+		
+		function tableClick(event){
+			const x = event.clientX;
+			const y = event.clientY;
+			const coor = {"element":"table", "x":x,"y":y };
+			click.push(coor);
+		}
+		function textClick(event){
+			const x = event.clientX;
+			const y = event.clientY;
+			const coor = {"element":"text", "x":x,"y":y };
+			click.push(coor);
+		}
+		function adClick(event){
+			const x = event.clientX;
+			const y = event.clientY;
+			const coor = {"element":"ad", "x":x,"y":y };
+			click.push(coor);
+		}
+		function imageClick(event){
+			const x = event.clientX;
+			const y = event.clientY;
+			const coor = {"element":"image","x":x,"y":y };
+			click.push(coor);
+		}
+		
+		
+		function mscroll(event){
+			scroll+=1;
+			console.log("scrolled");
+		}
+
+		
+		function update(){
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+					console.log(xmlhttp.responseText);
+				}
+			}
+			xmlhttp.open( "POST", "http://localhost:5000/api" );
+			xmlhttp.setRequestHeader( "Content-Type", "application/json" );
+			xmlhttp.send( JSON.stringify({"heatmap":heatmap,"click":click,"scroll":scroll}) );
+			setTimeout(update,3000);
+			
+			heatmap = [];
+			click  = [];
+			scroll = 0;
+		}
+		update();
+		
+	</script>
+
+		<div style=" height:100%; width:100%;" onmousemove="mmove(event)" onscroll="mscroll(event)">
+			<div style = " height:50%; width:100%;">
+				<div style = "float:left; height:100%; width:50%; " onclick="tableClick(event)">
+					 <img style="height:100%; width:100%" src="table.png" />
+				</div>
+					
+				<div style = " float:left; height:100%; width:50%;  " onclick="adClick(event)">
+					 <img  style="height:100%; width:100%"  src="ads.jpg" />
+				</div>
+			</div>
+			<div style = " height:50%; width:100%; ">
+				<div style = "float:left; height:100%; width:50%;" onclick="textClick(event)">
+					<img style="height:100%; width:100%" src="text.png" />
+				</div>
+				<div style = "float:left; height:100%; width:50%; " onclick="imageClick(event)">
+					<img  style="height:100%; width:100%"  src="image.jpg" />
+				</div>
+			</div>
+		</div>
+
+</html>
